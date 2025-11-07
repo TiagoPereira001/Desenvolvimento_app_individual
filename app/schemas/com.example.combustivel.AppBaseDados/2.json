@@ -1,0 +1,124 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "bde9df09b1a9b25b8b1a76c1697cd7b0",
+    "entities": [
+      {
+        "tableName": "tabela_abastecimentos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `veiculo_id` INTEGER NOT NULL, `kilometros` REAL NOT NULL, `litros` REAL NOT NULL, `custoTotal` REAL NOT NULL, `data` INTEGER NOT NULL, FOREIGN KEY(`veiculo_id`) REFERENCES `tabela_veiculos`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "veiculoId",
+            "columnName": "veiculo_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kilometros",
+            "columnName": "kilometros",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "litros",
+            "columnName": "litros",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "custoTotal",
+            "columnName": "custoTotal",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_tabela_abastecimentos_veiculo_id",
+            "unique": false,
+            "columnNames": [
+              "veiculo_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_tabela_abastecimentos_veiculo_id` ON `${TABLE_NAME}` (`veiculo_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "tabela_veiculos",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "veiculo_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "tabela_veiculos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nome` TEXT, `marca` TEXT, `modelo` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "marca",
+            "columnName": "marca",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modelo",
+            "columnName": "modelo",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bde9df09b1a9b25b8b1a76c1697cd7b0')"
+    ]
+  }
+}
