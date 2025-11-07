@@ -79,7 +79,7 @@
                     android:textColor="#FFFFFF"
                     android:backgroundTint="#D32F2F"
                     android:layout_marginTop="16dp"
-                    app:icon="@drawable/ic_baseline_delete_24"
+                    app:icon="@drawable/apagar"
                     style="@style/Widget.MaterialComponents.Button.Icon" />
 
             </LinearLayout>
@@ -110,7 +110,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Adicionar Abastecimento"
-        android:src="@drawable/ic_baseline_local_gas_station_24"
+        android:src="@drawable/bomba"
         app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

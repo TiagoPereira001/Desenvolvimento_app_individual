@@ -151,7 +151,7 @@ public class DetalhesVeiculoActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Apagar Veículo")
                 .setMessage("Tem a certeza que quer apagar o veículo '" + veiculoAtual.getNome() + "'?\n\nTodos os abastecimentos associados serão apagados permanentemente.")
-                .setIcon(R.drawable.ic_baseline_delete_24) // Icone de apagar (opcional)
+                .setIcon(R.drawable.apagar) // Icone de apagar (opcional)
                 // Botao "Sim"
                 .setPositiveButton("Sim, Apagar", (dialog, which) -> {
                     apagarVeiculo();

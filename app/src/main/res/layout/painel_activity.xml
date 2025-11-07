@@ -90,7 +90,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Adicionar Veiculo"
-        android:src="@drawable/ic_baseline_add_24"
+        android:src="@drawable/icone_mais"
         app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

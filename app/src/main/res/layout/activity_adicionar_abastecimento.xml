@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp"
         android:hint="Kilómetros percorridos"
-        app:startIconDrawable="@drawable/ic_baseline_speed_24">
+        app:startIconDrawable="@drawable/rapido">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/kms"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         android:hint="Preço por litro"
-        app:startIconDrawable="@drawable/ic_baseline_euro_24">
+        app:startIconDrawable="@drawable/dinheiro">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/preco_litro"
@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         android:hint="Preço Total (€)"
-        app:startIconDrawable="@drawable/ic_baseline_attach_money_24">
+        app:startIconDrawable="@drawable/carteira">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/preco_total"
