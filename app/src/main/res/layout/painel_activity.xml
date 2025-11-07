@@ -5,29 +5,83 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e3f0fa"
-    tools:context=".MainActivity"> <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="A Minha Garagem"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:textColor="#284b63"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="20dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_veiculos"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        tools:listitem="@layout/item_veiculo"/>
-</LinearLayout>
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:textColor="#284b63"
+            android:textSize="22sp"
+            tools:text="Olá, Tiago!" />
+
+        <TextView
+            android:id="@+id/tv_titulo_garagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_greeting"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp"
+            android:text="A Minha Garagem"
+            android:textColor="#284b63"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_veiculos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_titulo_garagem"
+            android:padding="8dp"
+            android:visibility="gone"
+            tools:listitem="@layout/item_veiculo" />
+
+        <LinearLayout
+            android:id="@+id/empty_state_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:alpha="0.3"
+                app:tint="#284b63" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="A tua garagem está vazia"
+                android:textColor="#284b63"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:paddingHorizontal="30dp"
+                android:text="Começa por adicionar o teu primeiro veículo clicando no botão '+'"
+                android:textColor="#284b63"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_veiculo"
@@ -35,7 +89,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:contentDescription="Adicionar Veiculo"
         android:src="@drawable/ic_baseline_add_24"
-        app:tint="@android:color/white"
-        android:contentDescription="Adicionar Veiculo"/>
+        app:tint="@android:color/white" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

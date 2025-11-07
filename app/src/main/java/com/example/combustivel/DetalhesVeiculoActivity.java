@@ -134,7 +134,7 @@ public class DetalhesVeiculoActivity extends AppCompatActivity {
                 }
 
                 tvKms.setText(String.format("Total Kms: %.1f km", finalTotalKms));
-                tvLitros.setText(String.format("Total Litros: %.1f L", finalTotalLitros));
+                tvLitros.setText(String.format("Total Litros: %.2f L", finalTotalLitros));
                 tvPreco.setText(String.format("Total Gasto: %.2f €", finalTotalGasto));
                 tvMedia.setText(String.format("Média: %.2f km/L", finalMediaGeral));
                 adapter.atualizarLista(listaDeAbastecimentos);
