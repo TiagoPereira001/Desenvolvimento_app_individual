@@ -22,33 +22,33 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Iniciar o SharedPreferences
+        //Inicia o SharedPreferences
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        // 2. Verificar se o nome JA EXISTE
+        //Verifica se o nome ja existe
         String nomeGuardado = prefs.getString(KEY_USER_NAME, null);
         if (nomeGuardado != null) {
-            // Se o nome ja existe, saltamos este ecra
+            // Se o nome ja existe, salta este ecra
             goToMainActivity();
-            return; // Importante para parar a execucao aqui
+            return;
         }
 
-        // 3. Se o nome NAO existe, mostramos o layout de boas-vindas
+        // Se o nome nao existe, mostra o layout de boas-vindas
         setContentView(R.layout.activity_welcome);
 
-        // 4. Ligar os elementos do XML
+        //Liga os elementos do XML
         editNome = findViewById(R.id.edit_user_name);
         btnContinuar = findViewById(R.id.btn_continuar);
 
-        // 5. Configurar o clique do botao
+        //Configura o clique do botao
         btnContinuar.setOnClickListener(v -> {
             String nomeInserido = editNome.getText().toString().trim();
 
-            // Validar se o nome nao esta vazio
+            //Valida se o nome nao esta vazio
             if (nomeInserido.isEmpty()) {
                 Toast.makeText(this, "Por favor, insere o teu nome", Toast.LENGTH_SHORT).show();
             } else {
-                // Guardar o nome
+                // Guarda o nome
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(KEY_USER_NAME, nomeInserido);
                 editor.apply();
@@ -59,12 +59,11 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Metodo que inicia o ecra principal (MainActivity) e fecha este.
-     */
+    // metodo para inciar o ecra principal e fechar este
+
     private void goToMainActivity() {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
         startActivity(intent);
-        finish(); // Fecha o WelcomeActivity para o utilizador nao voltar
+        finish();
     }
 }

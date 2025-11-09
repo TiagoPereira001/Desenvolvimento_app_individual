@@ -5,9 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e3f0fa"
+    android:background="@color/app_background"
     android:padding="30dp"
     tools:context=".AdicionarAbastecimentoActivity">
+    <!-- Título -->
 
     <TextView
         android:id="@+id/tv_titulo"
@@ -16,11 +17,15 @@
         android:text="Novo Abastecimento"
         android:textSize="36sp"
         android:textStyle="bold"
-        android:textColor="#284b63"
+        android:textColor="@color/texto_primario"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="50dp"/>
+    <!-- kms percorridos -->
+    <!-- usei o "<com.google.android.material.textfield.TextInputLayout" porque com o "editText" assim que o utilizador ia começar a escrever -->
+    <!-- o texto de ajuda ia desaparecer -->
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_kms"
@@ -31,16 +36,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp"
         android:hint="Kilómetros percorridos"
-        app:startIconDrawable="@drawable/rapido">
-
+        app:startIconDrawable="@drawable/rapido"
+        app:boxStrokeColor="@color/primario"
+        app:hintTextColor="@color/primario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/kms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-
+            android:inputType="numberDecimal"
+            android:textColor="@color/texto_primario" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!-- preço por litro -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_preco_litro"
         android:layout_width="0dp"
@@ -50,16 +57,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         android:hint="Preço por litro"
-        app:startIconDrawable="@drawable/dinheiro">
-
+        app:startIconDrawable="@drawable/carteira"
+        app:boxStrokeColor="@color/primario"
+        app:hintTextColor="@color/primario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/preco_litro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-
+            android:inputType="numberDecimal"
+            android:textColor="@color/texto_primario" /> </com.google.android.material.textfield.TextInputLayout>
+    <!-- preço total -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_preco_total"
         android:layout_width="0dp"
@@ -69,16 +77,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         android:hint="Preço Total (€)"
-        app:startIconDrawable="@drawable/carteira">
-
+        app:startIconDrawable="@drawable/dinheiro"
+        app:boxStrokeColor="@color/primario"
+        app:hintTextColor="@color/primario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/preco_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-
+            android:inputType="numberDecimal"
+            android:textColor="@color/texto_primario" /> </com.google.android.material.textfield.TextInputLayout>
+    <!-- botão guardar abastecimento -->
     <Button
         android:id="@+id/btn_guardar_abastecimento"
         android:layout_width="0dp"
@@ -89,7 +98,7 @@
         android:layout_marginTop="32dp"
         android:text="Guardar Abastecimento"
         android:textSize="18sp"
-        android:textColor="#284b63"
-        android:backgroundTint="#a1cbe6"/>
+        android:textColor="@color/texto"
+        android:backgroundTint="@color/primario"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

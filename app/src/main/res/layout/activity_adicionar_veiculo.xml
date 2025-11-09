@@ -6,54 +6,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
-    android:background="#e3f0fa"
+    android:background="@color/app_background"
     tools:context=".AdicionarVeiculoActivity">
-
+    <!-- Título -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Adicionar Veículo"
         android:textSize="36sp"
         android:textStyle="bold"
-        android:textColor="#284b63"
+        android:textColor="@color/texto_primario"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="40dp"/>
-
+    <!-- Nome do veiculo -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nome do Veículo (ex: Pessoal)"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/primario"
+        app:hintTextColor="@color/primario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_veiculo_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords"
+            android:textColor="@color/texto_primario" />
     </com.google.android.material.textfield.TextInputLayout>
-
+    <!-- marca -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Marca"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/primario"
+        app:hintTextColor="@color/primario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_veiculo_marca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords"
+            android:textColor="@color/texto_primario" />
     </com.google.android.material.textfield.TextInputLayout>
-
+    <!-- modelo -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Modelo"
-        android:layout_marginBottom="32dp">
+        android:layout_marginBottom="32dp"
+        app:boxStrokeColor="@color/primario"
+        app:hintTextColor="@color/primario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_veiculo_modelo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords"
+            android:textColor="@color/texto_primario" />
     </com.google.android.material.textfield.TextInputLayout>
+    <!-- botão guardar veiculo -->
 
     <Button
         android:id="@+id/btn_guardar_veiculo"
@@ -61,6 +74,6 @@
         android:layout_height="56dp"
         android:text="Guardar Veículo"
         android:textSize="18sp"
-        android:textColor="#284b63"
-        android:backgroundTint="#a1cbe6"/>
+        android:textColor="@color/texto"
+        android:backgroundTint="@color/primario"/>
 </LinearLayout>

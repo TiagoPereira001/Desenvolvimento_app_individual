@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e3f0fa"
+    android:background="@color/app_background"
     tools:context=".MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+    <!-- apresentação -->
         <TextView
             android:id="@+id/tv_greeting"
             android:layout_width="wrap_content"
@@ -18,10 +18,10 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
-            android:textColor="#284b63"
+            android:textColor="@color/secundario"
             android:textSize="22sp"
             tools:text="Olá, Tiago!" />
-
+    <!-- titulo -->
         <TextView
             android:id="@+id/tv_titulo_garagem"
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="20dp"
             android:text="A Minha Garagem"
-            android:textColor="#284b63"
+            android:textColor="@color/secundario"
             android:textSize="36sp"
             android:textStyle="bold" />
 
@@ -54,21 +54,20 @@
             android:padding="16dp"
             android:visibility="gone"
             tools:visibility="visible">
-
+        <!-- icone -->
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:alpha="0.3"
-                app:tint="#284b63" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="A tua garagem está vazia"
-                android:textColor="#284b63"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:src="@drawable/carro"
+                app:tint="@color/secundario" /> <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="A tua garagem está vazia"
+            android:textColor="@color/secundario"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,7 +76,7 @@
                 android:gravity="center"
                 android:paddingHorizontal="30dp"
                 android:text="Começa por adicionar o teu primeiro veículo clicando no botão '+'"
-                android:textColor="#284b63"
+                android:textColor="@color/secundario"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -91,6 +90,7 @@
         android:layout_margin="16dp"
         android:contentDescription="Adicionar Veiculo"
         android:src="@drawable/icone_mais"
-        app:tint="@android:color/white" />
+        app:backgroundTint="@color/primario"
+        app:tint="@color/texto" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

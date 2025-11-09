@@ -56,7 +56,7 @@ public class AdaptadorAbastecimento extends RecyclerView.Adapter<AdaptadorAbaste
         holder.bind(abastecimento, dateFormat);
     }
 
-    ///Metodo  (Override) do RecyclerView. Diz ao RecyclerView quantos items existem no total
+    //Metodo  (Override) do RecyclerView. Diz ao RecyclerView quantos items existem no total
 
 
     @Override
@@ -84,7 +84,7 @@ public class AdaptadorAbastecimento extends RecyclerView.Adapter<AdaptadorAbaste
             tvLitros = itemView.findViewById(R.id.item_litros);
         }
 
-        // Metodo "ajudante" (helper) que preenche os TextViews é chamado pelo 'onBindViewHolder'.
+        // Metodo " ajudante  que preenche os TextViews é chamado pelo 'onBindViewHolder'.
 
 
         public void bind(final Abastecimento ab, SimpleDateFormat dateFormat) {

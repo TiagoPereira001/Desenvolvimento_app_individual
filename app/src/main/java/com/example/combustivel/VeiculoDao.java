@@ -1,10 +1,11 @@
 package com.example.combustivel;
 
 import androidx.room.Dao;
-import androidx.room.Delete; // <-- IMPORTAR ISTO
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
+// o ficheiro abastecimentoDao e o veiculoDao sao documentos importantes para a base de dados da aplicação
 
 @Dao
 public interface VeiculoDao {
@@ -12,12 +13,8 @@ public interface VeiculoDao {
     @Insert
     void insert(Veiculo veiculo);
 
-    // --- ADICIONAR ESTE MÉTODO ---
-    // O @Delete e magico. Passamos-lhe um objeto Veiculo
-    // e o Room trata de o encontrar na BD e apaga-lo.
     @Delete
     void delete(Veiculo veiculo);
-    // --- FIM DA ADIÇÃO ---
 
     @Query("SELECT * FROM tabela_veiculos ORDER BY nome ASC")
     List<Veiculo> getAllVeiculos();
