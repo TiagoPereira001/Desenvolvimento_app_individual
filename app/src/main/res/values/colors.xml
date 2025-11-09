@@ -16,5 +16,7 @@
 
     <color name="primario">#00695C</color> <color name="secundario">#284b63</color> <color name="texto">#FFFFFFFF</color>
 
+    <color name ="hint"> #000000 </color>
+
     <color name="vermelho">#D32F2F</color> </resources>
 

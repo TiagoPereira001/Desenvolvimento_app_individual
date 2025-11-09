@@ -40,7 +40,9 @@
         android:layout_marginTop="32dp"
         android:hint="O teu nome"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
+
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText

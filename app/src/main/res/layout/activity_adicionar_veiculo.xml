@@ -25,7 +25,8 @@
         android:hint="Nome do Veículo (ex: Pessoal)"
         android:layout_marginBottom="16dp"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_veiculo_nome"
@@ -41,7 +42,8 @@
         android:hint="Marca"
         android:layout_marginBottom="16dp"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_veiculo_marca"
@@ -57,7 +59,8 @@
         android:hint="Modelo"
         android:layout_marginBottom="32dp"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_veiculo_modelo"

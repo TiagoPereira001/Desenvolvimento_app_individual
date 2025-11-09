@@ -38,7 +38,8 @@
         android:hint="Kilómetros percorridos"
         app:startIconDrawable="@drawable/rapido"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/kms"
@@ -59,7 +60,8 @@
         android:hint="Preço por litro"
         app:startIconDrawable="@drawable/carteira"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/preco_litro"
@@ -79,7 +81,8 @@
         android:hint="Preço Total (€)"
         app:startIconDrawable="@drawable/dinheiro"
         app:boxStrokeColor="@color/primario"
-        app:hintTextColor="@color/primario"
+        app:hintTextColor="@color/hint"
+        android:textColorHint="@color/hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/preco_total"
