@@ -5,33 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/cartao_background"
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
-    <!-- nome do carro -->
+        <ImageView
+            android:id="@+id/item_veiculo_icone_tipo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_veiculo_nome"
+            app:layout_constraintBottom_toBottomOf="@id/item_veiculo_nome"
+            app:tint="#284b63"
+            tools:src="@drawable/bomba" />
         <TextView
             android:id="@+id/item_veiculo_nome"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/texto_primario"
+            android:layout_marginStart="16dp"
+            android:textColor="#284b63"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_veiculo_icone_tipo"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Carro Principal" />
-    <!-- descrição do carro -->
         <TextView
             android:id="@+id/item_veiculo_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/texto_secundario"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/item_veiculo_nome"
+            app:layout_constraintTop_toBottomOf="@id/item_veiculo_nome"
             tools:text="Renault Clio" />
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

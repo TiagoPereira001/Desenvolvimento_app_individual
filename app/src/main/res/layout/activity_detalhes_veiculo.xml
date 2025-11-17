@@ -4,117 +4,197 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="#e3f0fa"
     tools:context=".DetalhesVeiculoActivity">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!-- titulo -->
-        <TextView
-            android:id="@+id/tv_detalhe_titulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/secundario"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            tools:text="Resumo do Veículo" />
-        <!-- o cartao -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/cartao_background">
-            <LinearLayout
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-        <!-- total kms -->
-            <TextView
-                android:id="@+id/kms_semana"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/texto_secundario"
-                android:textSize="18sp"
-                tools:text="Total Kms: 0.0 km" />
-        <!-- total litros -->
-            <TextView
-                android:id="@+id/ltrs_semana"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/texto_secundario"
-                android:textSize="18sp"
-                tools:text="Total Litros: 0.0 L" />
-        <!-- total gasto -->
-            <TextView
-                android:id="@+id/preco_semana"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/texto_secundario"
-                android:textSize="18sp"
-                tools:text="Total Gasto: 0.00 €" />
-        <!-- media -->
-            <TextView
-                android:id="@+id/resultado_media_semanal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:textColor="@color/texto_primario"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                tools:text="Média: 0.00 km/L" />
-        <!-- botao de apagar -->
-            <Button
-                android:id="@+id/btn_apagar_veiculo"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/vermelho"
-                android:text="Apagar Veículo"
-                android:textColor="@color/texto"
-                app:icon="@drawable/apagar"
-                app:iconTint="@color/texto" />
-        </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    <!-- titulo de abastecimento -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Histórico de Abastecimentos"
-            android:textColor="@color/secundario"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    <!-- historico de abastecimentos -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_historico_abastecimentos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            tools:listitem="@layout/item_abastecimento" />
-    </LinearLayout>
+            android:paddingBottom="60dp">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_abastecimento"
+            <TextView
+                android:id="@+id/tv_detalhe_titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="#284b63"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                tools:text="Resumo do Veículo" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:id="@+id/kms_semana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        tools:text="Total Kms: 0.0 km" />
+                    <TextView
+                        android:id="@+id/ltrs_semana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="18sp"
+                        tools:text="Total Litros: 0.0 L" />
+                    <TextView
+                        android:id="@+id/preco_semana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="18sp"
+                        tools:text="Total Gasto: 0.00 €" />
+                    <TextView
+                        android:id="@+id/resultado_media_semanal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        tools:text="Média: 0.00 km/L" />
+                    <Button
+                        android:id="@+id/btn_apagar_veiculo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Apagar Veículo"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#D32F2F"
+                        android:layout_marginTop="16dp"
+                        app:icon="@drawable/apagar"
+                        style="@style/Widget.MaterialComponents.Button.Icon" />
+                    <Button
+                        android:id="@+id/btn_estimativa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Estimar Gasto de Viagem"
+                        android:textColor="#284b63"
+                        android:backgroundTint="#a1cbe6"
+                        android:layout_marginTop="8dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_range_calculator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#40000000"
+                            android:alpha="0.3"
+                            android:layout_marginBottom="16dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Calculadora de Autonomia"
+                            android:textStyle="bold"
+                            android:textColor="#284b63"
+                            android:textSize="16sp"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="Bateria Atual (%)"
+                            app:suffixText="%"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_percentagem_bateria"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:textColor="#FF000000" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <Button
+                            android:id="@+id/btn_calcular_range"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Calcular Autonomia (Range)"
+                            android:backgroundTint="#a1cbe6"
+                            android:textColor="#284b63" />
+                        <TextView
+                            android:id="@+id/tv_resultado_range"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            tools:text="~ 350 km" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="Gastos por Mês"
+                android:textColor="#284b63"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/bar_chart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Histórico de Registos"
+                android:textColor="#284b63"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_historico_abastecimentos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                tools:listitem="@layout/item_abastecimento" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView_detalhes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="Adicionar Abastecimento"
-        android:src="@drawable/bomba"
-        app:backgroundTint="@color/primario"
-        app:tint="@color/texto" />
-
+        android:layout_gravity="bottom|center_horizontal"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111" /> <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fab_add_abastecimento"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="16dp"
+    android:layout_marginBottom="60dp"
+    android:contentDescription="Adicionar Abastecimento"
+    android:src="@drawable/bomba"
+    app:tint="@android:color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

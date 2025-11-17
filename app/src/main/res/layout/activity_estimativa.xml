@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e3f0fa"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context=".EstimativaActivity">
+
+    <TextView
+        android:id="@+id/tv_estimativa_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Estimativa de Consumo"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#284b63"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"/>
+    <TextView
+        android:id="@+id/tv_media_atual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="#284b63"
+        android:layout_marginBottom="32dp"
+        tools:text="Média atual: 18.5 kWh/100km" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Distância da viagem (km)"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:textColorHint="#284b63"
+        app:hintTextColor="#284b63"
+        app:startIconDrawable="@drawable/rapido">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_distancia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:textColor="#FF000000" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+        android:id="@+id/btn_calcular_estimativa"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#a1cbe6"
+        android:text="Calcular Gasto"
+        android:textColor="#284b63"
+        android:textSize="18sp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_resultado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gasto Estimado"
+                android:textColor="#284b63"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_resultado_estimativa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                tools:text="46.25 kWh" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -1,58 +1,78 @@
 package com.example.combustivel;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MenuItem; // Importei para o item do menu (o botao "voltar")
-import android.widget.Button; // Import da classe Button
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog; // Import para a caixa de dialogo de confirmacao
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// Ecra que mostra os detalhes de um veiculo, um dos principais ecras
+public class DetalhesVeiculoActivity extends AppCompatActivity implements AdaptadorAbastecimento.OnAbastecimentoLongClickListener {
 
-public class DetalhesVeiculoActivity extends AppCompatActivity {
-
-    // Referencias para os elementos do layout XML
     private TextView tvTitulo, tvKms, tvLitros, tvPreco, tvMedia;
     private RecyclerView rvAbastecimentos;
     private FloatingActionButton fabAddAbastecimento;
-    private Button btnApagarVeiculo;
+    private Button btnApagarVeiculo, btnEstimativa;
+    private LinearLayout layoutRangeCalculator;
+    private TextInputEditText editPercentagemBateria;
+    private Button btnCalcularRange;
+    private TextView tvResultadoRange;
+    private BarChart barChart;
 
-    //Variáveis da Base de Dados (Room)
     private AppBaseDados mDb;
-
-    // O ExecutorService ermite correr a base de dados numa "thread" separada.
     private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
 
-    //Variáveis da Lista (RecyclerView)
     private AdaptadorAbastecimento adapter;
     private List<Abastecimento> listaDeAbastecimentos = new ArrayList<>();
 
-    // O ID do veiculo que este ecra esta a mostrar
     private int veiculoId;
-    // O objeto "Veiculo" completo.
     private Veiculo veiculoAtual;
+    private double mediaCalculada = 0;
 
-    // Metodo "OnCreate" chamamos quando o ecra é criado
+    private boolean isPro = false;
+    private SharedPreferences prefs;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Liga este ficheiro Java ao seu ficheiro de layout XML
         setContentView(R.layout.activity_detalhes_veiculo);
 
-        //Inicia a instancia da base de dados
+        prefs = getSharedPreferences(ModoActivity.PREFS_NAME, MODE_PRIVATE);
+        isPro = prefs.getBoolean(ModoActivity.KEY_IS_PRO_USER, false);
         mDb = AppBaseDados.getDatabase(getApplicationContext());
 
-        //Liga as variaveis Java aos IDs dos elementos no XML
+        // Ligar variaveis
         tvTitulo = findViewById(R.id.tv_detalhe_titulo);
         tvKms = findViewById(R.id.kms_semana);
         tvLitros = findViewById(R.id.ltrs_semana);
@@ -61,177 +81,280 @@ public class DetalhesVeiculoActivity extends AppCompatActivity {
         rvAbastecimentos = findViewById(R.id.rv_historico_abastecimentos);
         fabAddAbastecimento = findViewById(R.id.fab_add_abastecimento);
         btnApagarVeiculo = findViewById(R.id.btn_apagar_veiculo);
+        btnEstimativa = findViewById(R.id.btn_estimativa);
+        layoutRangeCalculator = findViewById(R.id.layout_range_calculator);
+        editPercentagemBateria = findViewById(R.id.edit_percentagem_bateria);
+        btnCalcularRange = findViewById(R.id.btn_calcular_range);
+        tvResultadoRange = findViewById(R.id.tv_resultado_range);
+        barChart = findViewById(R.id.bar_chart);
+        adView = findViewById(R.id.adView_detalhes);
 
-        // busca o ID do veiculo que a MainActivity nos enviou.
-        // O "getIntent()" é quem transporta dados entre ecras.
         veiculoId = getIntent().getIntExtra("VEICULO_ID", -1);
-
-        // Se o ID for -1, mostra um erro
         if (veiculoId == -1) {
             Toast.makeText(this, "Erro: ID do Veículo não encontrado", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        //Chama o metodo para configurar o RecyclerView
         configurarLista();
+        configurarAnuncios();
 
-        //Configura o clique do botao (+)
         fabAddAbastecimento.setOnClickListener(v -> {
-            // Cria uma 'Intent'  para abrir o ecra "AdicionarAbastecimentoActivity"
             Intent intent = new Intent(DetalhesVeiculoActivity.this, AdicionarAbastecimentoActivity.class);
-            // Envia o ID deste veiculo para esse ecra
             intent.putExtra("VEICULO_ID", veiculoId);
             startActivity(intent);
         });
 
-        //Configura o clique do botao "Apagar"
-        btnApagarVeiculo.setOnClickListener(v -> {
-            // Chama o metodo que mostra a caixa de dialogo de confirmacao
-            mostrarDialogoConfirmacao();
+        btnApagarVeiculo.setOnClickListener(v -> mostrarDialogoConfirmacao());
+
+        btnEstimativa.setOnClickListener(v -> {
+            if (mediaCalculada == 0) {
+                Toast.makeText(this, "Sem dados suficientes para estimar.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (isPro) {
+                Intent intent = new Intent(DetalhesVeiculoActivity.this, EstimativaActivity.class);
+                intent.putExtra("VEICULO_ID", veiculoId);
+                intent.putExtra("VEICULO_TIPO", veiculoAtual.getTipoVeiculo());
+                intent.putExtra("VEICULO_MEDIA", mediaCalculada);
+                startActivity(intent);
+            } else {
+                mostrarPopupPro("A estimativa de consumo de viagem é uma funcionalidade PRO.\n\nDeseja comprar?");
+            }
         });
 
-        //Ativa a seta "Voltar" na barra de topo
+        btnCalcularRange.setOnClickListener(v -> calcularRange());
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
-    // Metodo "OnResume" que é chamado quando o utilizador volta ao ecra
+    private void configurarAnuncios() {
+        if (!isPro) {
+            MobileAds.initialize(this, initializationStatus -> {});
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        } else {
+            adView.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Recarrega todos os dados da Base de dados
         carregarDadosDoVeiculo();
     }
 
-    // Metodo que inicia e configura o RecyclerView
     private void configurarLista() {
-        // Cria o adaptador
-        adapter = new AdaptadorAbastecimento(listaDeAbastecimentos);
-        // Define que a lista é vertical
+        String tipo = (veiculoAtual != null) ? veiculoAtual.getTipoVeiculo() : "COMBUSTAO";
+        adapter = new AdaptadorAbastecimento(listaDeAbastecimentos, tipo, this);
         rvAbastecimentos.setLayoutManager(new LinearLayoutManager(this));
-        // Liga o adaptador ao RecyclerView
         rvAbastecimentos.setAdapter(adapter);
     }
 
-    // Metodo principal de logica, vai a base de dados, busca os dados, faz os calculos e atualiza o ecra
-
     private void carregarDadosDoVeiculo() {
-        //Executa a logica da BD na thread separada
         databaseExecutor.execute(() -> {
-
-            //Busca o objeto Veiculo completo
-            //Guarda numa variavel da classe para usar noutros metodos
             veiculoAtual = mDb.veiculoDao().getVeiculoById(veiculoId);
 
-            //Buscar o historico  de abastecimentos
             if (veiculoAtual != null) {
-                //Se o veiculo existe, vai buscar os seus abastecimentos
                 listaDeAbastecimentos = mDb.abastecimentoDao().getAbastecimentosDoVeiculo(veiculoId);
             } else {
-                // Se o veiculo nao existe, limpa a lista
                 listaDeAbastecimentos.clear();
             }
 
-            //Calcula os totais (Kms, Litros, Gasto, Media)
-            double totalKms = 0;
-            double totalLitros = 0;
-            double totalGasto = 0;
-            // Repete sobre cada abastecimento na lista
+            double totalKms = 0, totalUnidades = 0, totalGasto = 0;
             for (Abastecimento ab : listaDeAbastecimentos) {
                 totalKms += ab.kilometros;
-                totalLitros += ab.litros;
+                totalUnidades += ab.litros;
                 totalGasto += ab.custoTotal;
             }
-            // Calcula a media
-            double mediaGeral = (totalLitros > 0) ? (totalKms / totalLitros) : 0;
 
-            // Copia os totais para variaveis final
-            double finalTotalKms = totalKms;
-            double finalTotalLitros = totalLitros;
-            double finalTotalGasto = totalGasto;
-            double finalMediaGeral = mediaGeral;
+            mediaCalculada = (totalKms > 0) ? (totalUnidades / totalKms) * 100 : 0;
+            double finalTotalKms = totalKms, finalTotalUnidades = totalUnidades, finalTotalGasto = totalGasto, finalMediaGeral = mediaCalculada;
 
-            //Volta à thread principal para atualizar o ecra
             runOnUiThread(() -> {
-                // Verifica se o veiculo ainda existe
-                if (veiculoAtual != null) {
-                    // Define o titulo do ecra
-                    tvTitulo.setText(veiculoAtual.getMarca() + " " + veiculoAtual.getModelo());
-                } else {
-                    // Se o veiculo foi apagado, o 'veiculoAtual' é nulo
-                    tvTitulo.setText("Veículo não encontrado");
-                    // Fecha este ecra, porque o veiculo ja nao existe
+                if (veiculoAtual == null) {
                     finish();
-                    return; // Sai do metodo
-
+                    return;
                 }
 
-                // Atualiza o "cartao" de estatisticas
+                String tipo = veiculoAtual.getTipoVeiculo();
+                tvTitulo.setText(veiculoAtual.getMarca() + " " + veiculoAtual.getModelo());
+                tvKms.setText(String.format(Locale.getDefault(), "Total Kms: %.1f km", finalTotalKms));
+                tvPreco.setText(String.format(Locale.getDefault(), "Total Gasto: %.2f €", finalTotalGasto));
 
-                tvKms.setText(String.format("Total Kms: %.1f km", finalTotalKms));
-                tvLitros.setText(String.format("Total Litros: %.2f L", finalTotalLitros));
-                tvPreco.setText(String.format("Total Gasto: %.2f €", finalTotalGasto));
-                tvMedia.setText(String.format("Média: %.2f km/L", finalMediaGeral));
+                if (tipo.equals("ELETRICO")) {
+                    tvLitros.setText(String.format(Locale.getDefault(), "Total kWh: %.1f kWh", finalTotalUnidades));
+                    tvMedia.setText(String.format(Locale.getDefault(), "Média: %.2f kWh/100km", finalMediaGeral));
+                    btnEstimativa.setVisibility(View.VISIBLE);
+                    layoutRangeCalculator.setVisibility(View.VISIBLE);
+                    tvResultadoRange.setText("");
+                } else {
+                    tvLitros.setText(String.format(Locale.getDefault(), "Total Litros: %.1f L", finalTotalUnidades));
+                    tvMedia.setText(String.format(Locale.getDefault(), "Média: %.2f L/100km", finalMediaGeral));
+                    btnEstimativa.setVisibility(View.GONE);
+                    layoutRangeCalculator.setVisibility(View.GONE);
+                }
 
-                //Atualiza o (RecyclerView) com os novos dados
-                adapter.atualizarLista(listaDeAbastecimentos);
+                adapter = new AdaptadorAbastecimento(listaDeAbastecimentos, tipo, this);
+                rvAbastecimentos.setAdapter(adapter);
+                configurarGrafico(listaDeAbastecimentos);
             });
         });
     }
 
-    // Usei isto para evitar "misclick" para confirmar com o utilizador
-
-    private void mostrarDialogoConfirmacao() {
-        // Se o veiculo for nulo, nao ha nada para apagar
-        if (veiculoAtual == null) return;
-
-        // Usa o Construtor de AlertDialog
-        new AlertDialog.Builder(this)
-                .setTitle("Apagar Veículo") // Titulo da caixa
-                // Mensagem de confirmacao
-                .setMessage("Tem a certeza que quer apagar o veículo '" + veiculoAtual.getNome() + "'?\n\nTodos os abastecimentos associados serão apagados permanentemente.")
-                .setIcon(R.drawable.apagar) // Icone de apagar
-
-                // Botao "Sim"
-                .setPositiveButton("Sim, Apagar", (dialog, which) -> {
-                    // Se o utilizador clicar "Sim", chama o metodo 'apagarVeiculo()'
-                    apagarVeiculo();
-                })
-
-                // Botao "Nao"
-                .setNegativeButton("Não", null)
-                .show(); // Mostrar o dialogo
+    private void calcularRange() {
+        String percentagemTexto = editPercentagemBateria.getText().toString();
+        if (veiculoAtual == null || mediaCalculada == 0) { return; }
+        if (percentagemTexto.isEmpty()) {
+            Toast.makeText(this, "Insira a percentagem da bateria", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            double percentagem = Double.parseDouble(percentagemTexto);
+            if (percentagem < 0 || percentagem > 100) {
+                Toast.makeText(this, "Insira um valor entre 0 e 100", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            double capacidadeTotal = veiculoAtual.getCapacidadeBateria();
+            double kWhDisponiveis = capacidadeTotal * (percentagem / 100.0);
+            double media = mediaCalculada;
+            double autonomiaEstimada = (kWhDisponiveis / media) * 100.0;
+            tvResultadoRange.setText(String.format(Locale.getDefault(), "~ %.0f km", autonomiaEstimada));
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Valor de percentagem inválido", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    // apaga o veiculo da base de dadosm só é chamado se o utilizador confirmar o "delete"
+    private void configurarGrafico(List<Abastecimento> abastecimentos) {
+        Map<String, Float> gastosPorMes = new HashMap<>();
+        List<String> labelsMeses = new ArrayList<>();
+        SimpleDateFormat formatadorMesAno = new SimpleDateFormat("MMM/yy", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+
+        for (Abastecimento ab : abastecimentos) {
+            cal.setTimeInMillis(ab.data);
+            String mesAno = formatadorMesAno.format(cal.getTime());
+            float totalAtual = gastosPorMes.getOrDefault(mesAno, 0f);
+            totalAtual += (float) ab.custoTotal;
+            gastosPorMes.put(mesAno, totalAtual);
+            if (!labelsMeses.contains(mesAno)) {
+                labelsMeses.add(mesAno);
+            }
+        }
+
+        ArrayList<BarEntry> entradasGrafico = new ArrayList<>();
+        for (int i = 0; i < labelsMeses.size(); i++) {
+            String mes = labelsMeses.get(i);
+            float gasto = gastosPorMes.get(mes);
+            entradasGrafico.add(new BarEntry(i, gasto));
+        }
+
+        if (entradasGrafico.isEmpty()) {
+            barChart.clear();
+            barChart.invalidate();
+            return;
+        }
+
+        BarDataSet dataSet = new BarDataSet(entradasGrafico, "Gastos por Mês");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(12f);
+        BarData barData = new BarData(dataSet);
+
+        barChart.setFitBars(true);
+        barChart.setData(barData);
+        barChart.getDescription().setText("Euros (€)");
+        barChart.animateY(1000);
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labelsMeses));
+        barChart.getXAxis().setGranularity(1f);
+        barChart.getXAxis().setGranularityEnabled(true);
+        barChart.getXAxis().setLabelRotationAngle(-45);
+        barChart.invalidate();
+    }
+
+    // --- Metodos Pro ---
+    private void mostrarPopupPro(String mensagem) {
+        new AlertDialog.Builder(this)
+                .setTitle("Funcionalidade PRO")
+                .setMessage(mensagem)
+                .setPositiveButton("Sim, comprar", (dialog, which) -> simularCompraPro())
+                .setNegativeButton("Agora Não", null)
+                .show();
+    }
+
+    private void simularCompraPro() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(ModoActivity.KEY_IS_PRO_USER, true);
+        editor.apply();
+        this.isPro = true;
+        Toast.makeText(this, "Compra PRO simulada com sucesso! Tente clicar no botão outra vez.", Toast.LENGTH_LONG).show();
+        configurarAnuncios(); // Esconder o anuncio
+    }
+
+    // --- Metodos Editar/Apagar Abastecimento ---
+    @Override
+    public void onAbastecimentoLongClicked(Abastecimento abastecimento) {
+        final CharSequence[] items = {"Editar Registo", "Apagar Registo"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Escolha uma Ação");
+        builder.setItems(items, (dialog, item) -> {
+            if (items[item].equals("Editar Registo")) {
+                Intent intent = new Intent(this, AdicionarAbastecimentoActivity.class);
+                intent.putExtra("VEICULO_ID", veiculoId);
+                intent.putExtra("EXTRA_ABASTECIMENTO_ID", abastecimento.id);
+                startActivity(intent);
+            } else if (items[item].equals("Apagar Registo")) {
+                mostrarDialogoApagarAbastecimento(abastecimento);
+            }
+        });
+        builder.show();
+    }
+
+    private void mostrarDialogoApagarAbastecimento(Abastecimento abastecimento) {
+        new AlertDialog.Builder(this)
+                .setTitle("Apagar Registo")
+                .setMessage("Tem a certeza que quer apagar este registo?")
+                .setPositiveButton("Sim, Apagar", (dialog, which) -> apagarRegisto(abastecimento))
+                .setNegativeButton("Não", null)
+                .show();
+    }
+
+    private void apagarRegisto(Abastecimento abastecimento) {
+        databaseExecutor.execute(() -> {
+            mDb.abastecimentoDao().delete(abastecimento);
+            runOnUiThread(this::carregarDadosDoVeiculo);
+        });
+        Toast.makeText(this, "Registo apagado", Toast.LENGTH_SHORT).show();
+    }
+
+    // --- Metodos Apagar Veiculo ---
+    private void mostrarDialogoConfirmacao() {
+        if (veiculoAtual == null) return;
+        new AlertDialog.Builder(this)
+                .setTitle("Apagar Veículo")
+                .setMessage("Tem a certeza que quer apagar o veículo '" + veiculoAtual.getNome() + "'?\n\nTodos os registos associados serão apagados permanentemente.")
+                .setIcon(R.drawable.apagar)
+                .setPositiveButton("Sim, Apagar", (dialog, which) -> apagarVeiculo())
+                .setNegativeButton("Não", null)
+                .show();
+    }
 
     private void apagarVeiculo() {
         if (veiculoAtual == null) return;
-
-        //Corre a operacao 'delete' na thread da base de dados
         databaseExecutor.execute(() -> {
-
-            //Chama o comando @Delete do DAO,
-
             mDb.veiculoDao().delete(veiculoAtual);
-
-            // Volta a UI thread para mostrar o Toast e fecha o ecra
             runOnUiThread(() -> {
                 Toast.makeText(this, "Veículo '" + veiculoAtual.getNome() + "' apagado.", Toast.LENGTH_SHORT).show();
-                finish(); // Fecha este ecra
+                finish();
             });
         });
     }
 
-
-    // metodo chamado quando o utilizador clica na seta "voltar" na barra de topo
-
+    // --- Metodo Botao Voltar (Barra) ---
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Verifica se o item clicado é a seta de voltar
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;

@@ -1,84 +1,121 @@
 package com.example.combustivel;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// Ecra que criei para ser responsavel para criar um novo veiculo, funciona tambme como um formulario
-
 public class AdicionarVeiculoActivity extends AppCompatActivity {
 
-    // Referencias para os campos de texto definidos no XML
-    private TextInputEditText editNome, editMarca, editModelo;
-    // Referencia para o botao de guardar
+    private TextInputEditText editNome, editMarca, editModelo, editCapacidadeBateria;
     private Button btnGuardar;
-
-    // A  instância da base de dados Room (AppBaseDados)
     private AppBaseDados mDb;
-
-    // O ExecutorService é importante porque o android proibe operaçoes na thread principal.
     private final ExecutorService databaseExecutor = Executors.newSingleThreadExecutor();
 
-    // metodo "OnCreate, usado quando é criado o ecra
+    private RadioGroup rgTipoVeiculo;
+    private TextInputLayout layoutCapacidadeBateria;
+    private RadioButton rbEletrico, rbCombustao;
+    private String appMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Liga este ficheiro Java ao seu ficheiro de layout XML
         setContentView(R.layout.activity_adicionar_veiculo);
 
-        // Inicializa a instância da base de dados
         mDb = AppBaseDados.getDatabase(getApplicationContext());
+        SharedPreferences prefs = getSharedPreferences(ModoActivity.PREFS_NAME, MODE_PRIVATE);
+        appMode = prefs.getString(ModoActivity.KEY_APP_MODE, "COMBUSTAO");
 
-        // Liga as  variáveis Java aos elementos (Views) definidos no xml atraves dos ids
+        // Ligar componentes
         editNome = findViewById(R.id.edit_veiculo_nome);
         editMarca = findViewById(R.id.edit_veiculo_marca);
         editModelo = findViewById(R.id.edit_veiculo_modelo);
         btnGuardar = findViewById(R.id.btn_guardar_veiculo);
+        rgTipoVeiculo = findViewById(R.id.rg_tipo_veiculo);
+        layoutCapacidadeBateria = findViewById(R.id.layout_capacidade_bateria);
+        editCapacidadeBateria = findViewById(R.id.edit_capacidade_bateria);
+        rbEletrico = findViewById(R.id.rb_eletrico);
+        rbCombustao = findViewById(R.id.rb_combustao);
 
-        // Define o que acontece quando o botão "guardar" é clicado.
-        btnGuardar.setOnClickListener(v -> {
-            // Quando clicado, chama o  metodo  'guardarVeiculo()'.
-            guardarVeiculo();
-        });
+        // Logica de visibilidade
+        if (appMode.equals("AMBOS")) {
+            rgTipoVeiculo.setVisibility(View.VISIBLE);
+            setupRadioListeners();
+            if (rbEletrico.isChecked()) {
+                layoutCapacidadeBateria.setVisibility(View.VISIBLE);
+            }
+        } else if (appMode.equals("ELETRICO")) {
+            rgTipoVeiculo.setVisibility(View.GONE);
+            layoutCapacidadeBateria.setVisibility(View.VISIBLE);
+        } else {
+            rgTipoVeiculo.setVisibility(View.GONE);
+            layoutCapacidadeBateria.setVisibility(View.GONE);
+        }
 
-        //Ativa o botão "Voltar" na barra de topo
+        btnGuardar.setOnClickListener(v -> guardarVeiculo());
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
-    // metodo que contem a logica para validar os dados e guardar na base de dados
+    private void setupRadioListeners() {
+        rgTipoVeiculo.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rb_eletrico) {
+                layoutCapacidadeBateria.setVisibility(View.VISIBLE);
+            } else if (checkedId == R.id.rb_combustao) {
+                layoutCapacidadeBateria.setVisibility(View.GONE);
+            }
+        });
+    }
 
     private void guardarVeiculo() {
-        //Le o texto que o utilizador escreveu em cada campo e o trim tira espaços desnecessarios
         String nome = editNome.getText().toString().trim();
         String marca = editMarca.getText().toString().trim();
         String modelo = editModelo.getText().toString().trim();
 
-        // Verificar se os campos estão vazios.
         if (nome.isEmpty()) {
-            // Se estiver vazio, mostra uma mensagem de aviso
             Toast.makeText(this, "O nome do veículo é obrigatório", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Cria um novo objeto "Veiculo" com os dados validados.
-        Veiculo novoVeiculo = new Veiculo(nome, marca, modelo);
+        String tipoVeiculo;
+        double capacidadeBateria = 0.0;
 
-        // Executa a operação da base de dados na thread separada.
+        if (appMode.equals("AMBOS")) {
+            int selectedId = rgTipoVeiculo.getCheckedRadioButtonId();
+            tipoVeiculo = (selectedId == R.id.rb_eletrico) ? "ELETRICO" : "COMBUSTAO";
+        } else {
+            tipoVeiculo = appMode;
+        }
+
+        if (tipoVeiculo.equals("ELETRICO")) {
+            String capacidadeTexto = editCapacidadeBateria.getText().toString();
+            if (capacidadeTexto.isEmpty()) {
+                Toast.makeText(this, "Por favor, insira a capacidade da bateria", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                capacidadeBateria = Double.parseDouble(capacidadeTexto);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Capacidade da bateria inválida", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        Veiculo novoVeiculo = new Veiculo(nome, marca, modelo, tipoVeiculo, capacidadeBateria);
+
         databaseExecutor.execute(() -> {
-            // Este código corre em "background".
-
-            // Usa o DAO para executar o comando @Insert e para guardar o novo veiculo na tabela
             mDb.veiculoDao().insert(novoVeiculo);
-
-            // Depois de guardar, vai voltar à 'thread' principal (UI thread)
             runOnUiThread(() -> {
                 Toast.makeText(this, "Veículo guardado!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -86,11 +123,8 @@ public class AdicionarVeiculoActivity extends AppCompatActivity {
         });
     }
 
-    // Metodo que usamos para programar a ação da seta 'Voltar' na barra de topo
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Verifica se o item clicado é a seta de voltar
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
