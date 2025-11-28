@@ -2,7 +2,6 @@
 
 > **Nota:** Projeto final desenvolvido no âmbito da disciplina de Programação de Dispositivos Móveis.
 
-![Logo da App](app/src/main/res/drawable/image_60c48c.png)
 
 ## 📋 Sobre o Projeto
 
@@ -106,3 +105,4 @@ A base de dados `combustivel_database` é composta por duas entidades principais
 ## 📄 Licença
 
 Este projeto é para fins educativos.
+
