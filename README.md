@@ -106,9 +106,11 @@ A base de dados `combustivel_database` é composta por duas entidades principais
 
 Este projeto é para fins educativos.
 
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Here is the exact translation of your README.md into English, maintaining the structure, formatting, and technical terminology suitable for a GitHub repository.
+
+
 
 🚗 Bomba & Ficha - Intelligent Vehicle Manager
 Note: Final project developed for the Mobile Device Programming course.
@@ -211,3 +213,4 @@ Academic Project UBI
 
 📄 License
 This project is for educational purposes.
+
