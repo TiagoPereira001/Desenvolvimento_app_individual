@@ -109,108 +109,109 @@ Este projeto é para fins educativos.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+# 🚗 Bomba & Ficha - Intelligent Vehicle Manager
 
+> **Note:** Final project developed for the Mobile Device Programming course.
 
+## 📋 About the Project
 
-🚗 Bomba & Ficha - Intelligent Vehicle Manager
-Note: Final project developed for the Mobile Device Programming course.
-
-📋 About the Project
-Bomba & Ficha is a native Android application (Java) designed to solve a modern problem: the simultaneous management of Combustion and Electric vehicles in the same garage.
+**Bomba & Ficha** is a native Android application (Java) designed to solve a modern problem: the simultaneous management of **Combustion** and **Electric** vehicles in the same garage.
 
 Unlike traditional fuel calculators, this app offers robust data persistence, detailed statistics, and specific tools for electric car drivers (such as range calculation and kWh consumption).
 
-✨ Key Features
-🚙 Fleet Management (My Garage)
-Multi-Vehicle: Support for adding infinite vehicles.
+---
 
-Hybrid: Native support for Combustion (Gasoline/Diesel) and Electric (EV) vehicles.
+## ✨ Key Features
 
-Design: Clean interface with "Empty States" (illustrations when the list is empty).
+### 🚙 Fleet Management (My Garage)
+* **Multi-Vehicle:** Support for adding infinite vehicles.
+* **Hybrid:** Native support for **Combustion** (Gasoline/Diesel) and **Electric** (EV) vehicles.
+* **Design:** Clean interface with "Empty States" (illustrations when the list is empty).
 
-⛽ Refueling & Charging Management
-Complete History: Log of Kms, Total Cost, and Quantity.
+### ⛽ Refueling & Charging Management
+* **Complete History:** Log of Kms, Total Cost, and Quantity.
+* **Adaptive Units:** The app automatically switches between **Liters (L)** and **Kilowatts (kWh)** depending on the selected car.
+* **CRUD:** Ability to Add, Edit, and Delete individual records (via long click).
 
-Adaptive Units: The app automatically switches between Liters (L) and Kilowatts (kWh) depending on the selected car.
+### 📊 Statistics & Charts
+* **Dashboard:** Automatic calculation of:
+    * Total Spent (€).
+    * Average Consumption (L/100km or kWh/100km).
+* **Visualization:** Bar charts (**MPAndroidChart**) to visualize the evolution of monthly expenses.
 
-CRUD: Ability to Add, Edit, and Delete individual records (via long click).
+### ⚡ Exclusive EV Features (Electric Mode)
+* **Range Calculator:** Algorithm that estimates range based on current battery % and the driver's historical consumption average.
+* **Trip Estimation:** Cost forecast for a specific trip.
 
-📊 Statistics & Charts
-Dashboard: Automatic calculation of:
+### 💰 Freemium Model
+* **AdMob:** Integration of banner ads for free users.
+* **Google Play Billing:** Code structure ready for in-app purchases (Pro Version) that remove ads and unlock advanced features.
 
-Total Spent (€).
+---
 
-Average Consumption (L/100km or kWh/100km).
+## 🛠️ Architecture and Technologies
 
-Visualization: Bar charts (MPAndroidChart) to visualize the evolution of monthly expenses.
-
-⚡ Exclusive EV Features (Electric Mode)
-Range Calculator: Algorithm that estimates range based on current battery % and the driver's historical consumption average.
-
-Trip Estimation: Cost forecast for a specific trip.
-
-💰 Freemium Model
-AdMob: Integration of banner ads for free users.
-
-Google Play Billing: Code structure ready for in-app purchases (Pro Version) that remove ads and unlock advanced features.
-
-🛠️ Architecture and Technologies
 This project follows modern Android development best practices:
 
-Language: Java 17
+* **Language:** Java 17
+* **Data Persistence (Local):**
+    * **Room Database (SQLite):** For structured data (Vehicles, Refueling logs). Uses *One-to-Many* relations with `ForeignKeys` and `CASCADE` delete.
+    * **SharedPreferences:** For simple data (User name, Pro State, Mode preferences).
+* **User Interface (UI):**
+    * XML Layouts.
+    * **Material Design Components** (`TextInputLayout`, `MaterialCardView`, `FloatingActionButton`).
+    * **RecyclerView** with custom adapters and *ViewBinding*.
+* **Performance:**
+    * **Threading:** All database operations are executed in *Background Threads* (`ExecutorService`) to ensure the UI never blocks (ANR).
+* **External Libraries:**
+    * `MPAndroidChart` (Charts).
+    * `Google Play Services Ads` (AdMob).
+    * `Google Play Billing Client` (Payments).
 
-Data Persistence (Local):
+---
 
-Room Database (SQLite): For structured data (Vehicles, Refueling logs). Uses One-to-Many relations with ForeignKeys and CASCADE delete.
+## 🔧 How to Run
 
-SharedPreferences: For simple data (User name, Pro State, Mode preferences).
+1.  **Clone the Repository:**
+    ```bash
+    git clone [https://github.com/your-username/bomba-e-ficha.git](https://github.com/your-username/bomba-e-ficha.git)
+    ```
+2.  **Open in Android Studio:**
+    * Make sure you have **JDK 17** configured in your Gradle settings.
+3.  **Sync:** Let Gradle download all dependencies.
+4.  **Run:** Launch the app on an emulator (recommended: Pixel, API 34+) or physical device.
 
-User Interface (UI):
+---
 
-XML Layouts.
+## 📝 Database Structure
 
-Material Design Components (TextInputLayout, MaterialCardView, FloatingActionButton).
+The `combustivel_database` consists of two main entities:
 
-RecyclerView with custom adapters and ViewBinding.
+**`Veiculo` Table** (Vehicle)
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | INT (PK) | Unique identifier |
+| `nome` | TEXT | Car name |
+| `tipoVeiculo` | TEXT | "COMBUSTAO" (Combustion) or "ELETRICO" (Electric) |
+| `capacidadeBateria` | REAL | Only for EVs (kWh) |
 
-Performance:
+**`Abastecimento` Table** (Refueling/Charging)
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | INT (PK) | Unique identifier |
+| `veiculoId` | INT (FK) | Foreign key to `Veiculo` |
+| `litros` | REAL | Quantity (L or kWh) |
+| `custoTotal` | REAL | Price paid (€) |
 
-Threading: All database operations are executed in Background Threads (ExecutorService) to ensure the UI never blocks (ANR).
+---
 
-External Libraries:
+## 👤 Author
 
-MPAndroidChart (Charts).
+**Tiago Pereira**
+* Academic Project UBI
 
-Google Play Services Ads (AdMob).
+---
 
-Google Play Billing Client (Payments).
+## 📄 License
 
-🔧 How to Run
-Clone the Repository:
-
-Bash
-
-git clone https://github.com/your-username/bomba-e-ficha.git
-Open in Android Studio:
-
-Make sure you have JDK 17 configured in your Gradle settings.
-
-Sync: Let Gradle download all dependencies.
-
-Run: Launch the app on an emulator (recommended: Pixel, API 34+) or physical device.
-
-📝 Database Structure
-The combustivel_database consists of two main entities:
-
-Veiculo Table (Vehicle) | Column | Type | Description | | :--- | :--- | :--- | | id | INT (PK) | Unique identifier | | nome | TEXT | Car name | | tipoVeiculo | TEXT | "COMBUSTAO" (Combustion) or "ELETRICO" (Electric) | | capacidadeBateria | REAL | Only for EVs (kWh) |
-
-Abastecimento Table (Refueling/Charging) | Column | Type | Description | | :--- | :--- | :--- | | id | INT (PK) | Unique identifier | | veiculoId | INT (FK) | Foreign key to Veiculo | | litros | REAL | Quantity (L or kWh) | | custoTotal | REAL | Price paid (€) |
-
-👤 Author
-Tiago Pereira
-
-Academic Project UBI
-
-📄 License
 This project is for educational purposes.
-
