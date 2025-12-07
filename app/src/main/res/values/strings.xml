@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Bomba &amp; Ficha</string>
+
+    <!-- Textos Gerais -->
+    <string name="titulo_adicionar_abastecimento">Adicionar Abastecimento</string>
+
+    <!-- Textos usados no Java (AdicionarAbastecimentoActivity) -->
+    <string name="editar_registo">Editar Registo</string>
+    <string name="atualizar_registo">Atualizar</string>
+    <string name="novo_abastecimento">Novo Abastecimento</string>
+    <string name="guardar_abastecimento">Guardar</string>
+
+    <!-- Mensagens de Erro para Validação -->
+    <string name="erro_kms_vazio">Insira os quilómetros</string>
+    <string name="erro_preco_unidade_vazio">Insira o preço unitário</string>
+    <string name="erro_preco_total_vazio">Insira o total pago</string>
+    <string name="erro_preco_zero">O preço deve ser maior que 0</string>
+    <string name="erro_kms_negativos">Kms não podem ser negativos</string>
+
+    <!-- Outros textos que já deves ter na app... -->
+    <string name="gasolina">Gasolina</string>
+    <string name="gasoleo">Gasóleo</string>
+    <string name="eletrico">Elétrico</string>
 </resources>

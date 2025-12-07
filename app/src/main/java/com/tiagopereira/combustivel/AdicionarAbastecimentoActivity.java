@@ -1,6 +1,8 @@
-package com.example.combustivel;
+package com.tiagopereira.combustivel;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +17,9 @@ import java.util.concurrent.Executors;
 public class AdicionarAbastecimentoActivity extends AppCompatActivity {
 
     private TextInputEditText editKms, editPrecoUnidade, editPrecoTotal;
-    private TextInputLayout layoutPrecoUnidade;
+    // Adicionar referencias aos layouts para mostrar erros
+    private TextInputLayout layoutKms, layoutPrecoUnidade, layoutPrecoTotal;
+
     private TextView tvTitulo;
     private Button btnGuardar;
 
@@ -40,9 +44,18 @@ public class AdicionarAbastecimentoActivity extends AppCompatActivity {
         editKms = findViewById(R.id.kms);
         editPrecoTotal = findViewById(R.id.preco_total);
         editPrecoUnidade = findViewById(R.id.preco_unidade);
+
+        // Ligar os layouts (Tens de garantir que os IDs no XML correspondem, ou adicionar IDs aos TextInputLayouts se nao tiverem)
+        // Nota: No teu XML original, os IDs layout_kms, layout_preco_unidade, etc já existem. Perfeito.
+        layoutKms = findViewById(R.id.layout_kms);
         layoutPrecoUnidade = findViewById(R.id.layout_preco_unidade);
+        layoutPrecoTotal = findViewById(R.id.layout_preco_total);
+
         tvTitulo = findViewById(R.id.tv_titulo);
         btnGuardar = findViewById(R.id.btn_guardar_abastecimento);
+
+        // Limpar erros quando o utilizador começa a escrever
+        setupTextWatchers();
 
         veiculoId = getIntent().getIntExtra("VEICULO_ID", -1);
         abastecimentoIdParaEditar = getIntent().getIntExtra("EXTRA_ABASTECIMENTO_ID", -1);
@@ -53,16 +66,15 @@ public class AdicionarAbastecimentoActivity extends AppCompatActivity {
             return;
         }
 
-        // Decidir se estamos em modo ADICIONAR ou EDITAR
         if (abastecimentoIdParaEditar != -1) {
             modoEditar = true;
-            tvTitulo.setText("Editar Registo");
-            btnGuardar.setText("Atualizar Registo");
+            tvTitulo.setText(getString(R.string .editar_registo)); // Usa strings.xml!
+            btnGuardar.setText(getString(R.string.atualizar_registo));
             carregarDadosDoAbastecimento(abastecimentoIdParaEditar);
         } else {
             modoEditar = false;
-            tvTitulo.setText("Novo Abastecimento");
-            btnGuardar.setText("Guardar Abastecimento");
+            tvTitulo.setText(getString(R.string.novo_abastecimento));
+            btnGuardar.setText(getString(R.string.guardar_abastecimento));
             carregarTipoVeiculo();
         }
 
@@ -71,6 +83,23 @@ public class AdicionarAbastecimentoActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void setupTextWatchers() {
+        TextWatcher clearErrorWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                layoutKms.setError(null);
+                layoutPrecoUnidade.setError(null);
+                layoutPrecoTotal.setError(null);
+            }
+        };
+
+        editKms.addTextChangedListener(clearErrorWatcher);
+        editPrecoUnidade.addTextChangedListener(clearErrorWatcher);
+        editPrecoTotal.addTextChangedListener(clearErrorWatcher);
     }
 
     // Modo ADICIONAR
@@ -99,11 +128,11 @@ public class AdicionarAbastecimentoActivity extends AppCompatActivity {
 
                 definirHints(veiculoAtual.getTipoVeiculo());
 
-                editKms.setText(String.format(Locale.getDefault(), "%.1f", abastecimentoAtual.kilometros));
-                editPrecoTotal.setText(String.format(Locale.getDefault(), "%.2f", abastecimentoAtual.custoTotal));
+                editKms.setText(String.format(Locale.US, "%.1f", abastecimentoAtual.kilometros)); // Locale.US para garantir ponto em vez de virgula no codigo
+                editPrecoTotal.setText(String.format(Locale.US, "%.2f", abastecimentoAtual.custoTotal));
 
                 double precoPorUnidade = (abastecimentoAtual.litros > 0) ? (abastecimentoAtual.custoTotal / abastecimentoAtual.litros) : 0.0;
-                editPrecoUnidade.setText(String.format(Locale.getDefault(), "%.3f", precoPorUnidade));
+                editPrecoUnidade.setText(String.format(Locale.US, "%.3f", precoPorUnidade));
             });
         });
     }
@@ -121,18 +150,37 @@ public class AdicionarAbastecimentoActivity extends AppCompatActivity {
         String precoUnidadeTexto = editPrecoUnidade.getText().toString();
         String precoTotalTexto = editPrecoTotal.getText().toString();
 
-        if (kmTexto.isEmpty() || precoUnidadeTexto.isEmpty() || precoTotalTexto.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
-            return;
+        boolean temErro = false;
+
+        if (kmTexto.isEmpty()) {
+            layoutKms.setError("Insira os quilómetros");
+            temErro = true;
         }
 
-        try {
-            double kilometros = Double.parseDouble(kmTexto);
-            double precoPorUnidade = Double.parseDouble(precoUnidadeTexto);
-            double custoTotal = Double.parseDouble(precoTotalTexto);
+        if (precoUnidadeTexto.isEmpty()) {
+            layoutPrecoUnidade.setError("Insira o preço unitário");
+            temErro = true;
+        }
 
-            if (precoPorUnidade == 0) {
-                Toast.makeText(this, "O preço por unidade não pode ser zero", Toast.LENGTH_SHORT).show();
+        if (precoTotalTexto.isEmpty()) {
+            layoutPrecoTotal.setError("Insira o total pago");
+            temErro = true;
+        }
+
+        if (temErro) return;
+
+        try {
+            double kilometros = Double.parseDouble(kmTexto.replace(",", "."));
+            double precoPorUnidade = Double.parseDouble(precoUnidadeTexto.replace(",", "."));
+            double custoTotal = Double.parseDouble(precoTotalTexto.replace(",", "."));
+
+            if (precoPorUnidade <= 0) {
+                layoutPrecoUnidade.setError("O preço deve ser maior que 0");
+                return;
+            }
+
+            if (kilometros < 0) {
+                layoutKms.setError("Kms não podem ser negativos");
                 return;
             }
 
@@ -162,7 +210,7 @@ public class AdicionarAbastecimentoActivity extends AppCompatActivity {
             });
 
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Valores numéricos inválidos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Valores inválidos. Use ponto (.) ou vírgula (,)", Toast.LENGTH_SHORT).show();
         }
     }
 

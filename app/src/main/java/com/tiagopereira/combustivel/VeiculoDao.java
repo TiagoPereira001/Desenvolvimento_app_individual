@@ -1,4 +1,4 @@
-package com.example.combustivel;
+package com.tiagopereira.combustivel;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

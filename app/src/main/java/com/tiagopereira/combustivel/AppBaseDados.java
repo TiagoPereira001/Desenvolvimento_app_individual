@@ -1,4 +1,4 @@
-package com.example.combustivel;
+package com.tiagopereira.combustivel;
 
 import android.content.Context;
 import androidx.room.Database;

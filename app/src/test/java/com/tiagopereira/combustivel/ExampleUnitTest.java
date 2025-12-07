@@ -1,4 +1,4 @@
-package com.example.combustivel;
+package com.tiagopereira.combustivel;
 
 import org.junit.Test;
 

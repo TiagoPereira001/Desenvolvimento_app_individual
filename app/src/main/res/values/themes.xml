@@ -1,11 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Combustivel" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Cores da Marca -->
+        <item name="colorPrimary">@color/primary_brand</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
 
-        <item name="colorPrimary">@color/blue_dark</item>
-        <item name="colorPrimaryVariant">@color/blue_medium</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <!-- Cores Secundárias (Botões, seleções) -->
+        <item name="colorSecondary">@color/secondary_brand</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/black</item>
 
-        <item name="android:statusBarColor">@color/blue_light</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <!-- Fundo -->
+        <item name="android:windowBackground">@color/grey_background</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- CORREÇÃO CRÍTICA: Forçar cores de texto visíveis -->
+        <item name="android:textColorPrimary">@color/text_on_light</item> <!-- Texto normal a Preto -->
+        <item name="android:editTextColor">@color/text_on_light</item>    <!-- Texto a escrever a Preto -->
+        <item name="android:textColorHint">@color/text_hint</item>        <!-- Texto de dica cinzento -->
+    </style>
+
+    <style name="AppTitleStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary_variant</item>
     </style>
 </resources>

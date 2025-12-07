@@ -1,4 +1,4 @@
-package com.example.combustivel;
+package com.tiagopereira.combustivel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

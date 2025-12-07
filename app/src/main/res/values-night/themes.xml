@@ -1,11 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Combustivel" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- No modo noturno, usamos um vermelho um pouco menos saturado para não ferir a vista -->
+        <item name="colorPrimary">#E57373</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/black</item>
 
-        <item name="colorPrimary">@color/blue_dark</item>
-        <item name="colorPrimaryVariant">@color/blue_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondary_brand</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/black</item>
 
-        <item name="android:statusBarColor">@color/blue_dark</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@color/grey_dark_background</item>
+
+        <!-- CORREÇÃO CRÍTICA: Texto a branco para ver no fundo preto -->
+        <item name="android:textColorPrimary">@color/text_on_dark</item>
+        <item name="android:editTextColor">@color/text_on_dark</item>
+        <item name="android:textColorHint">#BDBDBD</item>
+    </style>
+
+    <style name="AppTitleStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#E57373</item>
     </style>
 </resources>
